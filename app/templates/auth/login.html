@@ -4,8 +4,7 @@
 {% block title %}HIS - Login{% endblock %}
 
 {% block body %}
-
-    <br>
+{{ super() }}
     <div class="row">
         <div class="page-header">
             <h1>Login</h1>
@@ -15,4 +14,12 @@
         </div>
 
     </div>
+{% endblock %}
+
+{% block titlelink1 %}
+{{ url_for('main.index') }}
+{% endblock %}
+
+{% block titlelink2 %}
+{{ url_for('main.index') }}
 {% endblock %}

@@ -27,6 +27,7 @@
                 <th>身份证</th>
                 <th>住址</th>
                 <th>电话</th>
+                <th>删除</th>
             </tr>
             </thead>
             <tbody>
@@ -38,6 +39,9 @@
                 <td>{{ patient.idcard }}</td>
                 <td>{{ patient.address }}</td>
                 <td>{{ patient.phone }}</td>
+                <td>
+                    <a href="javascript:deletepatient({{patient.id}})" class="btn btn-danger" role="button" id="deletedoctor">删除</a>
+                </td>
             </tr>
             {% endfor %}
             </tbody>
@@ -53,6 +57,25 @@
 
 {% endblock %}
 
+
 {% block script %}
 {{ super() }}
+    <script>
+        function deletepatient(patientid) {
+            var data={"patientid": patientid}
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('main.delete_patient') }}",
+                data: data,
+                dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
+                success: function(data) {
+                    window.location.reload()
+                },
+                error: function(xhr, type) {
+                    alert('something wrong')
+                }
+            });
+        }
+    </script>
 {% endblock %}

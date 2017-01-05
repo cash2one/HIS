@@ -1,4 +1,4 @@
-{% extends "patient.html" %}
+{% extends "doctor.html" %}
 {% import "_macros.html" as macros %}
 
 {% block style %}
@@ -17,22 +17,22 @@
 
     <div class="col-md-10">
         <table class="table table-striped">
-            <caption>挂号列表</caption>
+            <caption>已处理队列</caption>
             <thead>
             <tr>
-                <th>医生</th>
-                <th>科室</th>
-                <th>日期</th>
-                <th>患者</th>
+                <th>患者名字</th>
+                <th>性别</th>
+                <th>电话</th>
+                <th>会诊状态</th>
             </tr>
             </thead>
             <tbody>
             {% for regi in registrations %}
             <tr>
-                <td>{{ regi.doctor.name }}</td>
-                <td>{{ regi.doctor.department.name }}</td>
-                <td>{{ regi.registration_date }}</td>
-                <td>{{ current_user.name }}</td>
+                <td>{{ regi.patient.name }}</td>
+                <td>{{ regi.patient.gender }}</td>
+                <td>{{ regi.patient.phone }}</td>
+                <td>完成</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -40,7 +40,7 @@
 
         {% if pagination %}
             <div class="pagination">
-                {{ macros.pagination_widget(pagination, 'main.booking_list') }}
+                {{ macros.pagination_widget(pagination, 'main.handled_patient_list') }}
             </div>
         {% endif %}
     </div>

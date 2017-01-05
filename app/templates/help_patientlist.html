@@ -1,4 +1,5 @@
-{% extends "admin.html" %}
+
+{% extends "registrar.html" %}
 {% import "_macros.html" as macros %}
 
 {% block style %}
@@ -17,34 +18,38 @@
 
     <div class="col-md-10">
         <table class="table table-striped">
-            <caption>科室列表</caption>
+            <caption>患者列表</caption>
             <thead>
             <tr>
                 <th>名字</th>
-                <th></th>
-                <th>修改</th>
+                <th>诊疗卡号</th>
+                <th>生日</th>
+                <th>身份证</th>
+                <th>住址</th>
+                <th>电话</th>
                 <th>删除</th>
             </tr>
             </thead>
             <tbody>
-            {% for dpart in departments %}
-                <tr>
-                    <td>{{ dpart.name }}</td>
-                    <th></th>
-                    <td>
-                        <a href="{{ url_for('main.change_department',dname=dpart.name) }}" class="btn btn-warning" role="button">修改</a>
-                    </td>
-                    <td>
-                        <a href="javascript:deletedepartment({{dpart.id}})" class="btn btn-danger" role="button" id="deletedepartment">删除</a>
-                    </td>
-                </tr>
+            {% for patient in patients %}
+            <tr>
+                <td>{{ patient.name }}</td>
+                <td>{{ patient.medcard }}</td>
+                <td>{{ patient.birthday }}</td>
+                <td>{{ patient.idcard }}</td>
+                <td>{{ patient.address }}</td>
+                <td>{{ patient.phone }}</td>
+                <td>
+                    <a href="javascript:deletepatient({{patient.id}})" class="btn btn-danger" role="button" id="deletedoctor">删除</a>
+                </td>
+            </tr>
             {% endfor %}
             </tbody>
         </table>
 
         {% if pagination %}
             <div class="pagination">
-                {{ macros.pagination_widget(pagination, 'main.department_list') }}
+                {{ macros.pagination_widget(pagination, 'main.doctor_list') }}
             </div>
         {% endif %}
     </div>
@@ -52,15 +57,16 @@
 
 {% endblock %}
 
+
 {% block script %}
 {{ super() }}
     <script>
-        function deletedepartment(dpartid) {
-            var data={"dpartid": dpartid}
+        function deletepatient(patientid) {
+            var data={"patientid": patientid}
 
             $.ajax({
                 type: 'POST',
-                url: "{{ url_for('main.delete_department') }}",
+                url: "{{ url_for('main.delete_patient') }}",
                 data: data,
                 dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
                 success: function(data) {

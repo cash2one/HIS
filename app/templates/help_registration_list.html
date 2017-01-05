@@ -1,4 +1,4 @@
-{% extends "patient.html" %}
+{% extends "registrar.html" %}
 {% import "_macros.html" as macros %}
 
 {% block style %}
@@ -32,7 +32,7 @@
                 <td>{{ regi.doctor.name }}</td>
                 <td>{{ regi.doctor.department.name }}</td>
                 <td>{{ regi.registration_date }}</td>
-                <td>{{ current_user.name }}</td>
+                <td>{{ regi.patient.name }}</td>
             </tr>
             {% endfor %}
             </tbody>

@@ -16,6 +16,7 @@ class Registration(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'))
+    handled = db.Column(db.Boolean, default=False)
     registration_date = db.Column(db.Date)
 
 

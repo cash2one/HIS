@@ -25,6 +25,8 @@
                 <th>工号</th>
                 <th>身份证</th>
                 <th>科室</th>
+                <th>修改</th>
+                <th>删除</th>
             </tr>
             </thead>
             <tbody>
@@ -34,6 +36,13 @@
                 <td>{{ doctor.workcard }}</td>
                 <td>{{ doctor.idcard }}</td>
                 <td>{{ doctor.department.name }}</td>
+                <td>
+                    <a href="{{ url_for('main.change_doctor',dname=doctor.name,
+                       dpartname=doctor.department.name|fullfillstring) }}" class="btn btn-warning" role="button">修改</a>
+                </td>
+                <td>
+                    <a href="javascript:deletedoctor({{doctor.id}})" class="btn btn-danger" role="button" id="deletedoctor">删除</a>
+                </td>
             </tr>
             {% endfor %}
             </tbody>
@@ -51,4 +60,22 @@
 
 {% block script %}
 {{ super() }}
+    <script>
+        function deletedoctor(doctorid) {
+            var data={"doctorid": doctorid}
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('main.delete_doctor') }}",
+                data: data,
+                dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
+                success: function(data) {
+                    window.location.reload()
+                },
+                error: function(xhr, type) {
+                    alert('something wrong')
+                }
+            });
+        }
+    </script>
 {% endblock %}

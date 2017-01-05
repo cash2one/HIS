@@ -4,7 +4,7 @@
 {% block style %}
 {{ super() }}
 <style>
-#doctorhead{border:0px; margin:0px;}
+#dparthead{border:0px; margin:0px;}
 </style>
 {% endblock %}
 
@@ -15,9 +15,9 @@
 
 {% block content %}
 
-    <div class="col-md-6" id="doctorcontent">
-        <div class="page-header" id="doctorhead">
-            <h3>添加医生</h3>
+    <div class="col-md-6">
+        <div class="page-header" id="dparthead">
+            <h3>修改医生</h3>
          </div>
         {{ wtf.quick_form(form) }}
     </div>

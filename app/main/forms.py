@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Selec
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import Doctor, Departments, Patient
+from ..models import Doctor, Departments, Patient, Registrar
 import datetime
 
 
@@ -17,9 +17,7 @@ class AddDoctorForm(Form):
     idcard = StringField('Idcard', validators=[DataRequired(), Length(18, 18),
                                                Regexp('[0-9]', 0, 'idcard must be numbers')])
     name = StringField('Name', validators=[
-        DataRequired(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                          'Usernames must have only letters, '
-                                          'numbers, dots or underscores')])
+        DataRequired(), Length(1, 64)])
     password = PasswordField('Password', validators=[
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
@@ -34,16 +32,24 @@ class AddDoctorForm(Form):
         if Doctor.query.filter_by(idcard=field.data).first():
             raise ValidationError('idcard already in use.')
 
+class ChangeDoctorForm(Form):
+    name = StringField('Name', validators=[
+        DataRequired(), Length(1, 64)])
+    depart_id = SelectField(u'department', coerce=int)
+    submit = SubmitField('ChangeDoctor')
+
 class AddDepartmentForm(Form):
     name = StringField('Name', validators=[
-        DataRequired(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                              'departmentnames must have only letters, '
-                                              'numbers, dots or underscores')])
+        DataRequired(), Length(1, 64)])
     submit = SubmitField('AddDepartment')
-
     def validate_name(self, field):
         if Departments.query.filter_by(name=field.data).first():
             raise ValidationError('department already added.')
+
+class ChangeDepartmentForm(Form):
+    name = StringField('Name', validators=[
+        DataRequired(), Length(1, 64)])
+    submit = SubmitField('ChangeDepartment')
 
 class AddPatientForm(Form):
     medcard = StringField('Medcard', validators=[DataRequired(), Length(8,8),
@@ -56,9 +62,7 @@ class AddPatientForm(Form):
                                                  Regexp('[0-9]', 0, 'phone must be numbers')])
     address = StringField('Address', validators=[DataRequired(),Length(1,128)])
     name = StringField('Name', validators=[
-        DataRequired(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                          'Usernames must have only letters, '
-                                          'numbers, dots or underscores')])
+        DataRequired(), Length(1, 64)])
     password = PasswordField('Password', validators=[
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
@@ -70,6 +74,26 @@ class AddPatientForm(Form):
 
     def validate_idcard(self, field):
         if Patient.query.filter_by(idcard=field.data).first():
+            raise ValidationError('idcard already in use.')
+
+class AddRegistrarForm(Form):
+    workcard = StringField('Workcard', validators=[DataRequired(), Length(5,5),
+                                                   Regexp('[0-9]',0,'workcard must be numbers')])
+    idcard = StringField('Idcard', validators=[DataRequired(), Length(18, 18),
+                                               Regexp('[0-9]', 0, 'idcard must be numbers')])
+    name = StringField('Name', validators=[
+        DataRequired(), Length(1, 64)])
+    password = PasswordField('Password', validators=[
+        DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+    submit = SubmitField('AddRegistrar')
+
+    def validate_workcard(self, field):
+        if Registrar.query.filter_by(workcard=field.data).first():
+            raise ValidationError('workcard already registered.')
+
+    def validate_idcard(self, field):
+        if Registrar.query.filter_by(idcard=field.data).first():
             raise ValidationError('idcard already in use.')
 
 class BookingForm(Form):
@@ -85,3 +109,24 @@ class BookingForm(Form):
 class BookingDoctorForm(Form):
     doctor_id = SelectField(u'Doctor', coerce=int)
     submit = SubmitField('Submit')
+
+
+class HelpRegistrationForm(Form):
+    patient_medcard = StringField('Medcard', validators=[DataRequired(), Length(8,8),
+                                                   Regexp('[0-9]',0,'medcard must be numbers')])
+    password = PasswordField('Password', validators=[
+        DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+    depart_id = SelectField(u'Department', coerce=int)
+    bookingday = DateField('Bookingday', validators=[DataRequired()], format='%Y-%m-%d')
+    submit = SubmitField('Submit')
+
+    def validate_bookingday(self, field):
+        if field.data < datetime.datetime.now().date():
+            raise ValidationError("You can't book a doctor from the past.")
+
+
+class HelpRegistrationDoctorForm(Form):
+    doctor_id = SelectField(u'Doctor', coerce=int)
+    submit = SubmitField('Submit')
+

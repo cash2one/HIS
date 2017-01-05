@@ -9,6 +9,12 @@ app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
 
+def fullfillstring(string):
+    if not string:
+        return "hardtofindstring"
+    return string
+
+app.jinja_env.filters['fullfillstring']=fullfillstring
 
 def make_shell_context():
     return dict(app=app, db=db, Patient=Patient, Doctor=Doctor, Admin=Admin, Registrar=Registrar)

@@ -1,3 +1,4 @@
+
 {% extends "admin.html" %}
 {% import "_macros.html" as macros %}
 
@@ -17,34 +18,32 @@
 
     <div class="col-md-10">
         <table class="table table-striped">
-            <caption>科室列表</caption>
+            <caption>挂号员列表</caption>
             <thead>
             <tr>
                 <th>名字</th>
-                <th></th>
-                <th>修改</th>
+                <th>工号</th>
+                <th>身份证</th>
                 <th>删除</th>
             </tr>
             </thead>
             <tbody>
-            {% for dpart in departments %}
-                <tr>
-                    <td>{{ dpart.name }}</td>
-                    <th></th>
-                    <td>
-                        <a href="{{ url_for('main.change_department',dname=dpart.name) }}" class="btn btn-warning" role="button">修改</a>
-                    </td>
-                    <td>
-                        <a href="javascript:deletedepartment({{dpart.id}})" class="btn btn-danger" role="button" id="deletedepartment">删除</a>
-                    </td>
-                </tr>
+            {% for registrar in registrars %}
+            <tr>
+                <td>{{ registrar.name }}</td>
+                <td>{{ registrar.workcard }}</td>
+                <td>{{ registrar.idcard }}</td>
+                <td>
+                    <a href="javascript:deleteregistrar({{registrar.id}})" class="btn btn-danger" role="button" id="deletedoctor">删除</a>
+                </td>
+            </tr>
             {% endfor %}
             </tbody>
         </table>
 
         {% if pagination %}
             <div class="pagination">
-                {{ macros.pagination_widget(pagination, 'main.department_list') }}
+                {{ macros.pagination_widget(pagination, 'main.registrar_list') }}
             </div>
         {% endif %}
     </div>
@@ -55,12 +54,12 @@
 {% block script %}
 {{ super() }}
     <script>
-        function deletedepartment(dpartid) {
-            var data={"dpartid": dpartid}
+        function deleteregistrar(registrarid) {
+            var data={"registrarid": registrarid}
 
             $.ajax({
                 type: 'POST',
-                url: "{{ url_for('main.delete_department') }}",
+                url: "{{ url_for('main.delete_registrar') }}",
                 data: data,
                 dataType: 'json', // 注意：这里是指希望服务端返回json格式的数据
                 success: function(data) {

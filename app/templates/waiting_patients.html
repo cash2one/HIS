@@ -1,0 +1,58 @@
+{% extends "doctor.html" %}
+{% import "_macros.html" as macros %}
+
+{% block style %}
+{{ super() }}
+<style>
+
+</style>
+{% endblock %}
+
+{% block body %}
+{{ super() }}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="col-md-10">
+        <table class="table table-striped">
+            <caption>等待队列</caption>
+            <thead>
+            <tr>
+                <th>患者名字</th>
+                <th>性别</th>
+                <th>电话</th>
+                <th>叫号</th>
+                <th>会诊完成</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for regi in registrations %}
+            <tr>
+                <td>{{ regi.patient.name }}</td>
+                <td>{{ regi.patient.gender }}</td>
+                <td>{{ regi.patient.phone }}</td>
+                <td><a href="#" class="btn btn-info" role="button">叫号</a></td>
+                <td><a href="{{ url_for('main.complete_see_patient',
+                        patient_id=regi.patient.id,
+                        doctor_id=current_user.id,
+                        date=regi.registration_date) }}" class="btn btn-success" role="button">会诊完成</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if pagination %}
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination, 'main.waiting_patients') }}
+            </div>
+        {% endif %}
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+{% endblock %}

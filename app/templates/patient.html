@@ -11,10 +11,7 @@
 
 
 {% block body %}
-<br>
-<br>
-<br>
-<br>
+{{ super() }}
 
 <div class="row">
 	<div class="col-md-2">
@@ -28,15 +25,7 @@
                     <li> <a href="{{ url_for('main.booking_list') }}">查看预约</a></li>
                 </ul>
             </div>
-			<div class="div2">
-                <li><a href="#">诊疗卡管理</a></li>
-            </div>
-            <div class="div3">
-                <ul>
-                    <li class="active"><a href="{{ url_for('main.add_department') }}">诊疗卡信息</a></li>
-                    <li> <a href="{{ url_for('main.department_list') }}">权限检验链接</a></li>
-                </ul>
-            </div>
+
 		</ul>
 	</div>
     {% block content %}
@@ -54,9 +43,17 @@
 
 
     $(".div2").click(function(){
-        $(this).next("div").slideToggle("slow")
-                .siblings(".div3:visible").slideUp("slow");
+        $(this).next("div").slideToggle("fast")
+                .siblings(".div3:visible").slideUp("fast");
     });
 
 </script>
+{% endblock %}
+
+{% block titlelink1 %}
+{{ url_for('main.patient') }}
+{% endblock %}
+
+{% block titlelink2 %}
+{{ url_for('main.patient') }}
 {% endblock %}
