@@ -8,7 +8,7 @@ pip install -r requirements.txt
   
 python manage.py runserver  
   
-浏览器输入localhost:5000  
+浏览器输入localhost:5000  （我的开发环境是ubuntu kylin 16.04，项目路径不能有中文）
   
 
 ##账号说明：  
